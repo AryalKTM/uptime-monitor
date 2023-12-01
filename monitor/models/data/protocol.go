@@ -1,7 +1,7 @@
 package data
 
 import (
-	"github.com/bigbroproject/bigbrocore/models"
+	"github.com/AryalKTM/monitor/core/models"
 )
 
 type ProtocolData struct {

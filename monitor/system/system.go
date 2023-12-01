@@ -1,21 +1,24 @@
 package system
 
 import (
-	"image/color"
-	"io"
-	"log"
-	"time"
-	"net/http"
+	"github.com/AryalKTM/monitor/core/utilities"
+	"github.com/fatih/color"
 	"github.com/jaypipes/ghw"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
+	"io"
+	"log"
+	"net/http"
+	"time"
+	"strings"
+	"math"
 )
 
 type HostInfo struct {
 	Platform        string
 	PlatformVersion string
-	KenelArch       string
+	KernelArch       string
 	Uptime          uint64
 }
 
@@ -57,6 +60,19 @@ func PrintSystemInfo() {
 		log.Printf("[%s] %s \n", utilities.CreateColorString("Error", color.FgHiRed), err)
 		return
 	}
+	log.Printf("[%s] \n", utilities.CreateColorString("=== System Information ===", color.FgBlue))
+	log.Printf("[%s] %s (%s) %s \n", utilities.CreateColorString("OS", color.FgYellow), strings.Title(sysInfo.Host.Platform), sysInfo.Host.PlatformVersion, sysInfo.Host.KernelArch)
+	log.Printf("[%s] %s (%d cores) %d Mhz \n", utilities.CreateColorString("CPU", color.FgCyan), sysInfo.Cpu.ModelName, sysInfo.Cpu.Cores, int(sysInfo.Cpu.Frequency))
+	if sysInfo.Gpu.Name != "" {
+		log.Printf("[%s] %s (%s) \n", utilities.CreateColorString("GPU", color.FgMagenta), sysInfo.Gpu.Name, sysInfo.Gpu.Vendor)
+	}
+	log.Printf("[%s] Installed: %d MB | Used: %d MB | Free: %d MB \n", utilities.CreateColorString("RAM", color.FgRed), int(float64(sysInfo.Memory.Total)/math.Pow(1024, 2)), int(float64(sysInfo.Memory.Used)/math.Pow(1024, 2)), int(float64(sysInfo.Memory.Free)/math.Pow(1024, 2)))
+
+	if sysInfo.Network.InternetConnected {
+		log.Printf("[%s] %s (%s) \n", utilities.CreateColorString("Internet", color.FgHiCyan), utilities.CreateColorString("Connected", color.FgHiGreen), sysInfo.Network.PublicIP)
+	} else {
+		log.Printf("[%s] %s \n", utilities.CreateColorString("Internet", color.FgHiCyan), utilities.CreateColorString("Not Connected", color.FgHiRed))
+	}
 }
 
 func GetSystemInfo() (SystemInfo, error) {
@@ -82,7 +98,7 @@ func GetSystemInfo() (SystemInfo, error) {
 	v, err := mem.VirtualMemory()
 	if err != nil {
 		log.Printf("[%s] %s \n", utilities.CreateColorString("Error", color.FgHiRed), err)
-		return	SystemInfo{}, err
+		return SystemInfo{}, err
 	}
 
 	_gpu := true
@@ -104,8 +120,8 @@ func GetSystemInfo() (SystemInfo, error) {
 		publicIp = string(body)
 	}
 
-	gpuInf := GpuInfo {
-		Name: "",
+	gpuInf := GpuInfo{
+		Name:   "",
 		Vendor: "",
 	}
 
@@ -118,7 +134,7 @@ func GetSystemInfo() (SystemInfo, error) {
 		Host: HostInfo{
 			Platform:        h.Platform,
 			PlatformVersion: h.PlatformVersion,
-			KenelArch:       h.KenelArch,
+			KernelArch:       h.KernelArch,
 			Uptime:          h.Uptime,
 		},
 		Cpu: CpuInfo{

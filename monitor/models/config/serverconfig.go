@@ -13,7 +13,7 @@ type ServerConfig struct {
 	SSL                  bool
 }
 
-func ServerConfigFromFile(filepath string) (*ServerConfig, error) {
+func ServerConfigFromFile(filePath string) (*ServerConfig, error) {
 	dat, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err

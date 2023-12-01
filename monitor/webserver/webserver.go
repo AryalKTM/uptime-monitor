@@ -6,12 +6,16 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-	"github.com/AryalKTM/uptime-monitor/system"
-	"github.com/bigbroproject/bigbrocore/utilities"
+	"github.com/AryalKTM/monitor/monitor/system"
+	"github.com/AryalKTM/monitor/core/utilities"
+	"github.com/AryalKTM/monitor/core/models/response"
+	"github.com/AryalKTM/monitor/monitor/models/data"
+	"github.com/AryalKTM/monitor/monitor/models/config"
 	"github.com/fatih/color"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
+	"github.com/rakyll/statik/fs"
 )
 
 const (
@@ -95,8 +99,8 @@ func NewWebServer(serverConfPath string) *WebServer {
 	apiGroup.GET("/services", func(context *gin.Context) {getServicesList(context, &ws)})
 	apiGroup.GET("/system", func(context *gin.Context) {getSystemInformation(context)})
 
-	router.GET("/socket.io/*any", gin.WrapH(serverSocket))
-	router.POST("/socket.io/*any", gin.WrapH(serverSocket))
+	router.GET("/socket.io/*any", gin.WrapH(ServerSocket))
+	router.POST("/socket.io/*any", gin.WrapH(ServerSocket))
 
 	router.GET("/", func(context *gin.Context){context.Redirect(http.StatusMovedPermanently, "dashboard")})
 
@@ -147,7 +151,7 @@ func (ws *WebServer) listenInputChannel() {
 				}
 			}
 			if !protocolExists {
-				serviceData.Protocols = append(serviceData.Protocols, data.protocolData {
+				serviceData.Protocols = append(serviceData.Protocols, data.ProtocolData {
 					Protocol: resp.Protocol,
 					Err: resp.Error,
 				})
@@ -174,10 +178,7 @@ func (ws *WebServer) listenInputChannel() {
 }
 
 func newServerSocket() *socketio.Server {
-	serverSocket, err := socketio.NewServer(nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	serverSocket := socketio.NewServer(nil)
 
 	serverSocket.OnConnect("/", func (s socketio.Conn) error{
 		s.Join(ROOM_SERVICES_LISTENERS)
