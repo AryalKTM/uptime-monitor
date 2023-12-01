@@ -1,6 +1,0 @@
-services:
-  - name: Luminr.co
-    protocols:
-      - type: https
-        server: luminr.co
-        interval: 2000

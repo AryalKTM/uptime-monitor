@@ -1,28 +1,28 @@
 package models
 
 import (
+	"bytes"
 	"os"
-
-	"gopkg.in/yaml.v2"
+	"encoding/json"
 )
 
 type Protocol struct {
-	Type     string `yaml:"type"`
-	Port     int    `yaml:"port"`
-	Server   string `yaml:"server"`
-	Interval int64  `yaml:"inteval"`
-	Customs  Entry  `yaml:"customs"`
+	Type     string `json:"type"`
+	Port     int    `json:"port"`
+	Server   string `json:"server"`
+	Interval int64  `json:"inteval"`
+	Customs  Entry  `json:"customs"`
 }
 
 type Entry map[string]string
 
 type Service struct {
-	Name      string     `yaml:"name"`
-	Protocols []Protocol `yaml:"protocols"`
+	Name      string     `json:"name"`
+	Protocols []Protocol `json:"protocols"`
 }
 
 type Config struct {
-	Services []Service `yaml:"services"`
+	Services []Service `json:"services"`
 }
 
 func ConfigFromFile(filePath string) (*Config, error) {
@@ -31,7 +31,8 @@ func ConfigFromFile(filePath string) (*Config, error) {
 		return nil, err
 	}
 	conf := Config{}
-	err = yaml.Unmarshal([]byte(dat), &conf)
+	body := bytes.TrimPrefix(dat, []byte("\xef\xbb\xbf"))
+	err = json.Unmarshal([]byte(body), &conf)
 	if err != nil {
 		return nil, err
 	}

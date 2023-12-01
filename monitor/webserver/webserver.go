@@ -68,7 +68,6 @@ func NewWebServer(serverConfPath string) *WebServer {
 	configCors.AllowCredentials = true
 	router.Use(cors.New(configCors))
 	// router.Use(GinMiddleware("localhost:8080"))
-
 	// router.Use(cors.Default())
 	// router.Use(CORSMiddleware())
 	// router.Use(gin.Logger())
@@ -86,7 +85,10 @@ func NewWebServer(serverConfPath string) *WebServer {
 		ServerSocket: ServerSocket,
 	}
 	lastSystemInfo, err = system.GetSystemInfo()
-
+	if err != nil {
+		log.Fatal(err)
+		
+	}
 	//Register REST
 	statikFS, err := fs.New()
 	if err != nil {
@@ -127,8 +129,7 @@ func (ws *WebServer) Start() {
 }
 
 func (ws *WebServer) listenInputChannel() {
-	select {
-	case resp := <-ws.InputChannel:
+	resp := <-ws.InputChannel;
 		if serviceData, exists := (*ws.ServiceMap) [resp.ServiceName]; exists {
 			protocolExists := false
 			sendToWs := false
@@ -175,7 +176,6 @@ func (ws *WebServer) listenInputChannel() {
 			(*ws.ServiceMap)[resp.ServiceName] = auxData
 		}
 	}
-}
 
 func newServerSocket() *socketio.Server {
 	serverSocket := socketio.NewServer(nil)

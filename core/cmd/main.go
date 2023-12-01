@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	regProtocoInterfaces, regResponseHandlerInterfaces := core.Initialize(os.Args[1])
+	regProtocoInterfaces, regResponseHandlerInterfaces := core.Initialize(os.Args[0])
 
 	protocols.RegisterProtocolInterface(&regProtocoInterfaces, "ftp", protocols.FTP{})
 

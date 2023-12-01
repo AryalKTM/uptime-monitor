@@ -1,0 +1,10 @@
+{
+  "services": {
+    "name": "Luminr",
+    "protocols": {
+      "type": "https",
+      "server": "luminr.co",
+      "interval": 1000
+    }
+  }
+}

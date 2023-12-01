@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"log"
-
+	"path/filepath"
 	"github.com/AryalKTM/monitor/core/core"
 	"github.com/AryalKTM/monitor/core/responsehandlers"
 	"github.com/AryalKTM/monitor/core/utilities"
@@ -15,14 +15,15 @@ import (
 
 func main() {
 		errEnv := os.Setenv("GHW_DISABLE_WARNINGS", "1")
+		filePath := filepath.Join("..", "config", "serverconfig.json")
 		if errEnv != nil {
 			log.Printf("[%s] %s", utilities.CreateColorString("Warning",color.FgHiYellow), errEnv)
 		}
 		system.PrintSystemInfo()
-		ws := webserver.NewWebServer("config/serverconfig.yml")
+		ws := webserver.NewWebServer(filePath)
 		ws.Start()
 
-		regProtocolInterfaces, regResponseHandlerInterfaces := core.Initialize("config/serverconfig.yml")
+		regProtocolInterfaces, regResponseHandlerInterfaces := core.Initialize(filePath)
 
 		responsehandlers.RegisterResponseHandlerInterface(&regResponseHandlerInterfaces, "webServerHandler", responsehandler.WebServerRespHandler{OutputChannel: ws.InputChannel})
 		responsehandlers.RegisterResponseHandlerInterface(&regResponseHandlerInterfaces, "consoleMemory", responsehandlers.ConsoleHandlerWithMemory{})

@@ -2,14 +2,14 @@ package config
 
 import (
 	"os"
-	"gopkg.in/yaml.v2"
+	"encoding/json"
 )
 
 type ServerConfig struct {
-	Port                 int      `yaml:"port"`
+	Port                 int      `json:"port"`
 	Address              string   `yame:"address"`
-	AllowOrigins         []string `yaml:"allowOrigins"`
-	IntervalSystemInfoMs int64    `yaml:"internalSystemInfoMs"`
+	AllowOrigins         []string `json:"allowOrigins"`
+	IntervalSystemInfoMs int64    `json:"internalSystemInfoMs"`
 	SSL                  bool
 }
 
@@ -20,7 +20,7 @@ func ServerConfigFromFile(filePath string) (*ServerConfig, error) {
 	}
 
 	conf := ServerConfig{}
-	err = yaml.Unmarshal([]byte(dat), &conf)
+	err = json.Unmarshal([]byte(dat), &conf)
 	if err != nil {
 		return nil, err
 	}
