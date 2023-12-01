@@ -7,11 +7,11 @@ type Process struct {
 	Channel chan string
 }
 
-func NewProces(function func(), channel chan string) *Process{
+func NewProcess(function func(), channel chan string) *Process{
 	return &Process{Function: function, Channel: channel}
 }
 
-func ScheduleProcess (process *Process, ms int64) {
+func ScheduleProcess(process *Process, ms int64) {
 	ticker := time.NewTicker(time.Duration(ms) * time.Millisecond)
 	done := make(chan struct{})
 

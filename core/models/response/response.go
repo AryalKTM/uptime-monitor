@@ -1,9 +1,7 @@
 package response
 
 import (
-	""
-
-	"github.com/bigbroproject/bigbrocore/models"
+	"github.com/AryalKTM/uptime-core/models"
 )
 
 type ResponseType string

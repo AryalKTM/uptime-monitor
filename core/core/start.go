@@ -1,17 +1,16 @@
 package core
 
 import (
-	"fmt"
 	"log"
 	"strconv"
 	"time"
 
-	"github.com/bigbroproject/bigbrocore/models"
-	"github.com/bigbroproject/bigbrocore/models/response"
-	"github.com/bigbroproject/bigbrocore/process"
-	"github.com/bigbroproject/bigbrocore/protocols"
-	"github.com/bigbroproject/bigbrocore/responsehandlers"
-	"github.com/bigbroproject/bigbrocore/utilities"
+	"github.com/AryalKTM/uptime-core/models"
+	"github.com/AryalKTM/uptime-core/models/response"
+	"github.com/AryalKTM/uptime-core/process"
+	"github.com/AryalKTM/uptime-core/protocols"
+	"github.com/AryalKTM/uptime-core/responsehandlers"
+	"github.com/AryalKTM/uptime-core/utilities"
 	"github.com/fatih/color"
 )
 
@@ -22,7 +21,7 @@ func Initialize(configPath string) (map[string]protocols.ProtocolInterface, map[
 	return protocols.DefaultRegisteredProtocolInterfaces(), responsehandlers.DefaultRegisteredResponseHandlers()
 }
 
-func Start(DefaultRegisteredProtocolInterfaces map[string]protocols.ProtocolInterface, registeredResponseHandlerInterfaces map[string]responsehandlers.ResponseHandlerInterface) {
+func Start(registeredProtocolInterfaces map[string]protocols.ProtocolInterface, registeredResponseHandlerInterfaces map[string]responsehandlers.ResponseHandlerInterface) {
 	conf, err := models.ConfigFromFile(_configPath)
 	if err != nil {
 		log.Fatal(err)
@@ -42,7 +41,7 @@ func Start(DefaultRegisteredProtocolInterfaces map[string]protocols.ProtocolInte
 		service := conf.Services[i]
 		for i2 := range service.Protocols {
 			protocol := service.Protocols[i2]
-			protocolInterface := registeredResponseHandlerInterfaces[protocol.Type]
+			protocolInterface := registeredProtocolInterfaces[protocol.Type]
 			if protocols.IsRegistered(&registeredProtocolInterfaces, protocol.Type) {
 				proc := process.NewProcess(func() {
 					if err = protocolInterface.CheckService(protocol); err == nil {
@@ -62,20 +61,20 @@ func Start(DefaultRegisteredProtocolInterfaces map[string]protocols.ProtocolInte
 				process.ScheduleProcess(proc, protocol.Interval)
 			} else {
 				red := color.New(color.FgRed).SprintFunc()
-				log.Println(fmt.Sprintf("[%s] [%s] [%s] [%s - %s - %s] An Error Has Occured: %s", red("Error"), time.Now().Format(time.RFC3339), service.Name, protocol.Type, protocol.Server, strconv.Itoa(protocol.Port), "Protocol Interface"+protocol.Type+"Not Registered"))
+				log.Printf("[%s] [%s] [%s] [%s - %s - %s] An Error Has Occured: %s", red("Error"), time.Now().Format(time.RFC3339), service.Name, protocol.Type, protocol.Server, strconv.Itoa(protocol.Port), "Protocol Interface"+protocol.Type+"Not Registered")
 			}
 
-		}
 	}
 	for {
 		time.Sleep(100 * time.Millisecond)
 	}
 }
+}
 
 func startResponseBrodadcaster(configuration *models.Config, responseChannel *chan response.Response, responseHandlers *map[string]responsehandlers.ResponseHandlerInterface) {
 	chanArray := make([]*chan response.Response, 0)
 
-	for _, handler := range *&responseHandlers {
+	for _, handler := range *responseHandlers {
 		channel := make(chan response.Response)
 		chanArray = append(chanArray, &channel)
 
