@@ -1,20 +1,17 @@
 package webserver
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
 	"github.com/AryalKTM/uptime-monitor/system"
-	"github.com/bigbroproject/bigbrocore/models/response"
 	"github.com/bigbroproject/bigbrocore/utilities"
 	"github.com/fatih/color"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
-	"github.com/rakyll/statik/fs"
 )
 
 const (
@@ -49,7 +46,7 @@ func NewWebServer(serverConfPath string) *WebServer {
 
 	ServerSocket := newServerSocket()
 	go func() {
-		err := serverSocket.Serve()
+		err := ServerSocket.Serve()
 
 		if err != nil {
 			log.Fatal(err)
@@ -82,7 +79,7 @@ func NewWebServer(serverConfPath string) *WebServer {
 		Router: router,
 		ServiceMap: &serviceMap,
 		InputChannel: inputChannel,
-		ServerSocket: serverSocket,
+		ServerSocket: ServerSocket,
 	}
 	lastSystemInfo, err = system.GetSystemInfo()
 

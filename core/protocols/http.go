@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/AryalKTM/uptime-core/models"
+	"github.com/AryalKTM/monitor/core/models"
 )
 
 type Http struct{}

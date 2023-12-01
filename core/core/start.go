@@ -5,12 +5,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/AryalKTM/uptime-core/models"
-	"github.com/AryalKTM/uptime-core/models/response"
-	"github.com/AryalKTM/uptime-core/process"
-	"github.com/AryalKTM/uptime-core/protocols"
-	"github.com/AryalKTM/uptime-core/responsehandlers"
-	"github.com/AryalKTM/uptime-core/utilities"
+	"github.com/AryalKTM/monitor/core/models"
+	"github.com/AryalKTM/monitor/core/models/response"
+	"github.com/AryalKTM/monitor/core/process"
+	"github.com/AryalKTM/monitor/core/protocols"
+	"github.com/AryalKTM/monitor/core/responsehandlers"
+	"github.com/AryalKTM/monitor/core/utilities"
 	"github.com/fatih/color"
 )
 

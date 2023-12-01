@@ -1,8 +1,6 @@
 package protocols
 
-import (
-	"github.com/AryalKTM/uptime-core/models"
-)
+import "github.com/AryalKTM/monitor/core/models"
 
 type FTP struct {
 }

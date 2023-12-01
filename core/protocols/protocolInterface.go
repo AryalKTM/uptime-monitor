@@ -1,6 +1,6 @@
 package protocols
 
-import "github.com/AryalKTM/uptime-core/models"
+import "github.com/AryalKTM/monitor/core/models"
 
 type ProtocolInterface interface {
 	CheckService(Protocol models.Protocol) error

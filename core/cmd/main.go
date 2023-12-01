@@ -2,9 +2,9 @@ package main
 
 import (
 	"os"
-	"github.com/AryalKTM/uptime-core/responsehandlers"
-	"github.com/AryalKTM/uptime-core/protocols"
-	"github.com/AryalKTM/uptime-core/core"
+	"github.com/AryalKTM/monitor/core/responsehandlers"
+	"github.com/AryalKTM/monitor/core/protocols"
+	"github.com/AryalKTM/monitor/core/core"
 )
 
 func main() {

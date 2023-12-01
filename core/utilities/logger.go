@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 	"strconv"
-	"github.com/AryalKTM/uptime-core/models"
+	"github.com/AryalKTM/monitor/core/models"
 	"github.com/fatih/color"
 )
 

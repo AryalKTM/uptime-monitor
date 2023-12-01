@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/AryalKTM/uptime-core/models"
+	"github.com/AryalKTM/monitor/core/models"
 )
 
 type ResponseType string

@@ -7,6 +7,9 @@ import (
 	"time"
 	"net/http"
 	"github.com/jaypipes/ghw"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/host"
+	"github.com/shirou/gopsutil/mem"
 )
 
 type HostInfo struct {
@@ -56,7 +59,7 @@ func PrintSystemInfo() {
 	}
 }
 
-func GetSystemInfo(SystemInfo, error) {
+func GetSystemInfo() (SystemInfo, error) {
 
 	c, err := cpu.Info()
 	if err != nil {
@@ -136,5 +139,5 @@ func GetSystemInfo(SystemInfo, error) {
 			PublicIP:          publicIp,
 		},
 	}
-	return systemInfo
+	return systemInfo, nil
 }

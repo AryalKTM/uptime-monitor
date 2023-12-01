@@ -1,8 +1,8 @@
 package responsehandlers
 
 import (
-	"github.com/AryalKTM/uptime-core/models"
-	"github.com/AryalKTM/uptime-core/models/response"
+	"github.com/AryalKTM/monitor/core/models"
+	"github.com/AryalKTM/monitor/core/models/response"
 )
 
 type ResponseHandlerInterface interface {
